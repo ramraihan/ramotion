@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>RAMOTION — Premium Alight Motion Murah & Otomatis</title>
+    <meta name="description" content="Beli akun Alight Motion Pro Premium murah hanya Rp 500 perak instan dan otomatis via QRIS. Proses cepat langsung dikirim ke email kamu oleh RAMOTION.">
+    <meta name="keywords" content="Alight Motion Pro, Alight Motion Premium, RAMOTION, Beli Alight Motion, AM Pro Murah">
+    <meta name="author" content="Rama">
+    
+    <link rel="icon" type="image/png" href="https://link-ke-foto-logo-kamu.com/logo.png">
+    <link rel="apple-touch-icon" href="https://link-ke-foto-logo-kamu.com/logo.png">
+
+    <style>
+        /* ==========================================================================
+           1. CORE ARCHITECTURE & DESIGN SYSTEM (HAND-CRAFTED STYLE)
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        :root {
+            --bg-canvas: #e0f2fe;
+            --surface-card: #ffffff;
+            --brand-primary: #0ea5e9;
+            --brand-hover: #0284c7;
+            --text-main: #1e293b;
+            --text-secondary: #475569;
+            --text-disabled: #94a3b8;
+            --alert-bg: #fef2f2;
+            --alert-text: #ef4444;
+            --success-color: #22c55e;
+            --neutral-light: #f8fafc;
+            --border-subtle: #cbd5e1;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-secondary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        /* ==========================================================================
+           2. MAIN CONTAINER LAYOUT
+           ========================================================================== */
+        .checkout-container {
+            background: var(--surface-card);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 28px;
+            padding: 45px 35px;
+            position: relative;
+            box-shadow: 0 4px 25px rgba(14, 165, 233, 0.06);
+        }
+
+        /* ==========================================================================
+           3. BRANDING HEADER (RAMOTION DI PALING ATAS)
+           ========================================================================== */
+        .brand-section {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .main-logo {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--brand-primary);
+            letter-spacing: -1.5px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .sub-logo {
+            font-size: 13.5px;
+            color: var(--text-disabled);
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           4. PRODUCT BANNER
+           ========================================================================== */
+        .product-card {
+            background: var(--neutral-light);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.2px;
+            margin-bottom: 12px;
+        }
+
+        .product-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ==========================================================================
+           5. FORMS & STYLED USER CONTROLS
+           ========================================================================== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 18px;
+            background: var(--neutral-light);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            color: var(--text-main);
+            font-size: 14.5px;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+        }
+
+        .form-group input:focus {
+            border-color: var(--brand-primary);
+            background: #ffffff;
+        }
+
+        /* Total Pembayaran Section */
+        .total-summary-box {
+            background: #f0f9ff;
+            border: 1px solid #e0f2fe;
+            padding: 15px 18px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0369a1;
+        }
+
+        .total-amount {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--brand-primary);
+        }
+
+        /* ==========================================================================
+           7. PRIMARY SUBMIT TRIGGER BUTTON
+           ========================================================================== */
+        .btn-submit {
+            width: 100%;
+            background: var(--brand-primary);
+            color: #ffffff;
+            border: none;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            margin-bottom: 12px;
+        }
+
+        .btn-submit:hover {
+            background: var(--brand-hover);
+        }
+
+        /* Teks Info Admin */
+        .admin-fee-note {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-disabled);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        /* ==========================================================================
+           8. DYNAMIC STOCK LIST (DI BAWAH TOMBOL & INFO ADMIN)
+           ========================================================================== */
+        .stock-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--neutral-light);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 12.5px;
+            font-weight: 700;
+            border: 1px solid #f1f5f9;
+            margin-bottom: 24px;
+        }
+
+        .stock-badge {
+            color: var(--success-color);
+        }
+
+        /* ==========================================================================
+           9. ALERT BANNER
+           ========================================================================== */
+        .alert-banner {
+            background-color: var(--alert-bg);
+            border-radius: 14px;
+            padding: 14px 18px;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--alert-text);
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: -0.1px;
+        }
+
+        /* ==========================================================================
+           10. LOWER ARCHITECTURE (TUTORIAL & ACCENT INFRASTRUCTURE)
+           ========================================================================== */
+        .footer-details {
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 30px;
+        }
+
+        .block-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 14px;
+        }
+
+        .tutorial-wrapper {
+            margin-bottom: 30px;
+        }
+
+        .link-item {
+            display: block;
+            font-size: 13px;
+            color: var(--brand-primary);
+            text-decoration: none;
+            margin-bottom: 12px;
+            word-break: break-all;
+            font-weight: 500;
+        }
+
+        .link-item:hover {
+            text-decoration: underline;
+        }
+
+        .policy-wrapper {
+            margin-bottom: 28px;
+        }
+
+        .policy-item {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            list-style: none;
+        }
+
+        .closing-note {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-disabled);
+            margin-bottom: 26px;
+            font-style: italic;
+        }
+
+        .grid-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .btn-action-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .btn-wa { background-color: var(--success-color); }
+        .btn-tg { background-color: var(--brand-primary); }
+    </style>
+</head>
+<body>
+
+    <div class="checkout-container">
+        <div class="brand-section">
+            <h1 class="main-logo">RAMOTION</h1>
+            <p class="sub-logo">Sistem Pengiriman Akun Instan & Otomatis</p>
+        </div>
+
+        <div class="product-card">
+            <div class="product-title">╭₊˚🌀 Alight Motion Private</div>
+            <p class="product-desc">
+                Akses penuh semua efek, preset, dan fitur premium tanpa watermark. Akun private (1 device). Sistem pengiriman adaptif instan langsung ke email tujuan.
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Alamat Email Kamu</label>
+            <input type="email" id="email" placeholder="nama@gmail.com" required>
+        </div>
+
+        <div class="form-group">
+            <label for="jumlah">Jumlah Pembelian</label>
+            <input type="number" id="jumlah" value="1" min="1" oninput="hitungHargaTotal()">
+        </div>
+
+        <div class="total-summary-box">
+            <span class="total-label">Total Pembayaran:</span>
+            <span class="total-amount" id="total-harga-display">Rp 500</span>
+        </div>
+
+        <button class="btn-submit" onclick="prosesPembayaran()">Beli Sekarang (QRIS)</button>
+
+        <div class="admin-fee-note">*Harga belum termasuk biaya admin</div>
+
+        <div class="stock-indicator">
+            <span>📦 Status Ketersediaan:</span>
+            <span class="stock-badge">STOK: REAL TIME (OTOMATIS)</span>
+        </div>
+
+        <div class="alert-banner">
+            ‼️ CATATAN PENTING: Buka link generator di Google atau Chrome!
+        </div>
+
+        <div class="footer-details">
+            <div class="tutorial-wrapper">
+                <h3 class="block-title">💌 Tutor login:</h3>
+                <a href="https://t.me/ramtutorial/3?comment=3" target="_blank" class="link-item">https://t.me/ramtutorial/3?comment=3</a>
+                <a href="https://linktr.ee/ramcomel" target="_blank" class="link-item">https://linktr.ee/ramcomel</a>
+                <a href="https://vm.tiktok.com/ZS9FNVrNEkurs-oR33T/" target="_blank" class="link-item">https://vm.tiktok.com/ZS9FNVrNEkurs-oR33T/</a>
+            </div>
+
+            <div class="policy-wrapper">
+                <h3 class="block-title">ⓘ Aturan & Garansi (S&K)</h3>
+                <ul>
+                    <li class="policy-item">• Login hanya di 1 device</li>
+                    <li class="policy-item">• Garansi hanya untuk back free</li>
+                    <li class="policy-item">• Akun ke-lock/disable akibat login di banyak device = no garansi</li>
+                    <li class="policy-item">• garansi berlaku 3 month</li>
+                    <li class="policy-item">• kirim ss login max 1x24 jam, tidak kirim? no garansi !!!</li>
+                </ul>
+            </div>
+
+            <div class="closing-note">thanks for order ♡</div>
+
+            <div class="grid-actions">
+                <a href="https://wa.me/6289502002397?text=Halo%20Rama,%20ini%20SS%20login%20Alight%20Motion%20saya" target="_blank" class="btn-action-link btn-wa">KIRIM SS VIA WA</a>
+                <a href="https://t.me/ramaplb" target="_blank" class="btn-action-link btn-tg">KIRIM SS VIA TELEGRAM</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            API_GATEWAY_URL: "/api/proses", 
+            HARGA_PER_ITEM: 500
+        };
+
+        function hitungHargaTotal() {
+            const jumlahInput = document.getElementById('jumlah');
+            let qty = parseInt(jumlahInput.value);
+            
+            if (isNaN(qty) || qty < 1) {
+                qty = 1;
+            }
+            
+            const total = qty * CONFIG.HARGA_PER_ITEM;
+            document.getElementById('total-harga-display').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        function prosesPembayaran() {
+            const emailInput = document.getElementById('email').value.trim();
+            let qtyInput = parseInt(document.getElementById('jumlah').value);
+            
+            if (isNaN(qtyInput) || qtyInput < 1) {
+                qtyInput = 1;
+            }
+            
+            if (!emailInput || !emailInput.includes('@')) {
+                alert('[SISTEM]: Masukkan alamat email valid kamu!');
+                return;
+            }
+
+            alert('[SISTEM]: Memproses pesanan kamu, mengalihkan ke halaman QRIS...');
+
+            fetch(CONFIG.API_GATEWAY_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email_pembeli: emailInput,
+                    jumlah_beli: qtyInput,
+                    produk: "Alight Motion Private"
+                })
+            }).catch(e => console.log("Gateway server log active."));
+
+            window.location.href = `qris.html?email=${encodeURIComponent(emailInput)}&qty=${qtyInput}`;
+        }
+    </script>
+</body>
+</html>

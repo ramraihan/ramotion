@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Pembayaran QRIS — RAMOTION Premium Alight Motion</title>
+    <meta name="description" content="Halaman pembayaran aman RAMOTION. Selesaikan pembayaran QRIS Rp 500 perak untuk memproses pengiriman akun Alight Motion Pro Premium secara instan dan otomatis.">
+    <meta name="keywords" content="Pembayaran RAMOTION, QRIS Alight Motion, Alight Motion Premium">
+    <meta name="author" content="Rama">
+    
+    <link rel="icon" type="image/png" href="https://link-ke-foto-logo-kamu.com/logo.png">
+    <link rel="apple-touch-icon" href="https://link-ke-foto-logo-kamu.com/logo.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        :root {
+            --bg-canvas: #e0f2fe;
+            --surface-card: #ffffff;
+            --brand-primary: #0ea5e9;
+            --text-main: #1e293b;
+            --text-secondary: #475569;
+            --text-disabled: #94a3b8;
+            --success-color: #22c55e;
+            --success-hover: #16a34a;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-secondary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .checkout-container {
+            background: var(--surface-card);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 28px;
+            padding: 45px 35px;
+            position: relative;
+            box-shadow: 0 4px 25px rgba(14, 165, 233, 0.06);
+        }
+
+        .brand-section {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .main-logo {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--brand-primary);
+            letter-spacing: -1.5px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        #qris-container {
+            text-align: center;
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            border: 2px dashed var(--brand-primary);
+        }
+
+        #qris-image {
+            max-width: 220px;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 14px auto;
+            display: block;
+            background: #ffffff;
+            padding: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .btn-check-status {
+            width: 100%;
+            background: var(--success-color);
+            color: #ffffff;
+            border: none;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-check-status:hover {
+            background: var(--success-hover);
+        }
+
+        .order-info-box {
+            background: #f0f9ff;
+            padding: 15px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .order-info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .order-info-item:last-child {
+            margin-bottom: 0;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 6px;
+            font-weight: 800;
+            color: var(--brand-primary);
+        }
+
+        .closing-note {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-disabled);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="checkout-container">
+        <div class="brand-section">
+            <h1 class="main-logo">RAMOTION</h1>
+            <p style="font-size: 13.5px; color: var(--text-disabled); font-weight: 600;">Halaman Pembayaran Aman</p>
+        </div>
+
+        <div class="order-info-box">
+            <div class="order-info-item">
+                <span>Email Pembeli:</span>
+                <span id="info-email">-</span>
+            </div>
+            <div class="order-info-item">
+                <span>Jumlah Akun:</span>
+                <span id="info-qty">1</span>
+            </div>
+            <div class="order-info-item">
+                <span>Total Bayar:</span>
+                <span id="info-total">Rp 500</span>
+            </div>
+        </div>
+
+        <div id="qris-container">
+            <p style="font-size: 13px; font-weight:700; color:var(--text-main)">Silakan Scan QRIS Pembayaran:</p>
+            <img id="qris-image" src="" alt="QRIS RAMOTION">
+            <p style="font-size: 12px; color:var(--text-disabled); margin-bottom: 16px;">Otomatis divalidasi oleh sistem</p>
+            
+            <button class="btn-check-status" onclick="cekStatusTransaksi()">🔄 Cek Status Pembayaran</button>
+        </div>
+
+        <div class="closing-note">Harap selesaikan pembayaran agar akun dikirim otomatis ♡</div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            API_CHECK_STATUS_URL: "/api/cek-status",
+            HARGA_PER_ITEM: 500
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailParam = urlParams.get('email') || '';
+        const qtyParam = parseInt(urlParams.get('qty')) || 1;
+        const totalHarga = qtyParam * CONFIG.HARGA_PER_ITEM;
+
+        document.getElementById('info-email').innerText = emailParam;
+        document.getElementById('info-qty').innerText = `${qtyParam} Akun`;
+        document.getElementById('info-total').innerText = `Rp ${totalHarga.toLocaleString('id-ID')}`;
+
+        const qrisImage = document.getElementById('qris-image');
+        qrisImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=RAMOTION_PAY_QTY_${qtyParam}_EMAIL_${encodeURIComponent(emailParam)}`;
+
+        function cekStatusTransaksi() {
+            if (!emailParam) {
+                alert('[SISTEM]: Email tidak valid.');
+                return;
+            }
+
+            alert('[SISTEM]: Sedang mengecek status pembayaran kamu ke server Pakasir...');
+
+            fetch(`${CONFIG.API_CHECK_STATUS_URL}?email=${encodeURIComponent(emailParam)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "success") {
+                    alert('🎉 Pembayaran SUKSES! Akun otomatis dikirim ke email kamu. Sila cek kotak masuk/spam.');
+                } else {
+                    alert('⏳ Pembayaran BELUM terdeteksi. Sila selesaikan pembayaran QRIS terlebih dahulu atau tunggu beberapa saat lagi.');
+                }
+            })
+            .catch(e => {
+                alert('⏳ Menunggu pembayaran masuk... Jika sudah transfer, silakan klik tombol ini lagi secara berkala.');
+            });
+        }
+    </script>
+</body>
+</html>
