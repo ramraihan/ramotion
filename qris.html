@@ -137,6 +137,18 @@
             color: var(--text-disabled);
             font-style: italic;
         }
+        
+        .loading-text {
+            font-size: 14px;
+            color: var(--brand-primary);
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
     </style>
 </head>
 <body>
@@ -154,17 +166,29 @@
             </div>
             <div class="order-info-item">
                 <span>Jumlah Akun:</span>
-                <span id="info-qty">1</span>
+                <span id="info-qty">-</span>
+            </div>
+            <div class="order-info-item">
+                <span>Harga Produk:</span>
+                <span id="info-harga">Menghitung...</span>
+            </div>
+            <div class="order-info-item">
+                <span>Biaya Admin (QRIS):</span>
+                <span id="info-admin">Menghitung...</span>
             </div>
             <div class="order-info-item">
                 <span>Total Bayar:</span>
-                <span id="info-total">Rp 500</span>
+                <span id="info-total">Menghitung...</span>
             </div>
         </div>
 
         <div id="qris-container">
             <p style="font-size: 13px; font-weight:700; color:var(--text-main)">Silakan Scan QRIS Pembayaran:</p>
-            <img id="qris-image" src="" alt="QRIS RAMOTION">
+            
+            <div id="qris-image-wrapper">
+                <p class="loading-text" style="margin: 40px 0;">⏳ Membuat QRIS Resmi Pakasir...</p>
+            </div>
+            
             <p style="font-size: 12px; color:var(--text-disabled); margin-bottom: 16px;">Otomatis divalidasi oleh sistem</p>
             
             <button class="btn-check-status" onclick="cekStatusTransaksi()">🔄 Cek Status Pembayaran</button>
@@ -175,22 +199,53 @@
 
     <script>
         const CONFIG = {
-            API_CHECK_STATUS_URL: "/api/cek-status",
-            HARGA_PER_ITEM: 500
+            API_GET_INVOICE_URL: "/api/proses", // Mengambil data invoice dari backend rahasia kita
+            API_CHECK_STATUS_URL: "/api/proses"  // Melakukan cek status pembayaran ke backend
         };
 
         const urlParams = new URLSearchParams(window.location.search);
         const emailParam = urlParams.get('email') || '';
-        const qtyParam = parseInt(urlParams.get('qty')) || 1;
-        const totalHarga = qtyParam * CONFIG.HARGA_PER_ITEM;
+        const qtyParam = urlParams.get('qty') || '1';
 
+        // Tampilkan data awal yang dibawa dari halaman depan
         document.getElementById('info-email').innerText = emailParam;
         document.getElementById('info-qty').innerText = `${qtyParam} Akun`;
-        document.getElementById('info-total').innerText = `Rp ${totalHarga.toLocaleString('id-ID')}`;
 
-        const qrisImage = document.getElementById('qris-image');
-        qrisImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=RAMOTION_PAY_QTY_${qtyParam}_EMAIL_${encodeURIComponent(emailParam)}`;
+        // 1. FUNGSI UNTUK MENGAMBIL DATA DATA LANGSUNG DARI RESPON API PAKASIR
+        function muatInvoicePakasir() {
+            if (!emailParam) return;
 
+            // Meminta rincian biaya asli & QRIS dari backend
+            fetch(`${CONFIG.API_GET_INVOICE_URL}?action=get_invoice&email=${encodeURIComponent(emailParam)}&qty=${qtyParam}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "success") {
+                    // ISI DATA BERDASARKAN RESPON ASLI DARI PIHAK PAKASIR
+                    document.getElementById('info-harga').innerText = `Rp ${parseInt(data.harga_produk).toLocaleString('id-ID')}`;
+                    document.getElementById('info-admin').innerText = `Rp ${parseInt(data.biaya_admin).toLocaleString('id-ID')}`;
+                    document.getElementById('info-total').innerText = `Rp ${parseInt(data.total_bayar).toLocaleString('id-ID')}`;
+                    
+                    // Tempel Gambar QRIS Asli dari Pakasir ke halaman web
+                    document.getElementById('qris-image-wrapper').innerHTML = `
+                        <img id="qris-image" src="${data.qris_image_url}" alt="QRIS Resmi Pakasir">
+                    `;
+                } else {
+                    document.getElementById('qris-image-wrapper').innerHTML = `
+                        <p style="color: red; font-size: 13px; font-weight: bold; margin: 30px 0;">❌ Gagal memuat QRIS dari Pakasir. Silakan muat ulang halaman ini.</p>
+                    `;
+                }
+            })
+            .catch(err => {
+                document.getElementById('qris-image-wrapper').innerHTML = `
+                    <p style="color: red; font-size: 13px; font-weight: bold; margin: 30px 0;">❌ Gangguan Koneksi Sistem. Coba refresh kembali.</p>
+                `;
+            });
+        }
+
+        // Jalankan fungsi muat invoice saat halaman dibuka pertama kali
+        window.onload = muatInvoicePakasir;
+
+        // 2. FUNGSI CEK STATUS PEMBAYARAN
         function cekStatusTransaksi() {
             if (!emailParam) {
                 alert('[SISTEM]: Email tidak valid.');
@@ -199,7 +254,7 @@
 
             alert('[SISTEM]: Sedang mengecek status pembayaran kamu ke server Pakasir...');
 
-            fetch(`${CONFIG.API_CHECK_STATUS_URL}?email=${encodeURIComponent(emailParam)}`)
+            fetch(`${CONFIG.API_CHECK_STATUS_URL}?action=cek_status&email=${encodeURIComponent(emailParam)}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status === "success") {
